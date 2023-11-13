@@ -195,15 +195,11 @@ class InnerScrollAndFocusHandler extends React.Component<ScrollAndFocusHandlerPr
         | ReturnType<typeof findDOMNode> = null
       const hashFragment = focusAndScrollRef.hashFragment
 
-      if (hashFragment) {
-        domNode = getHashFragmentDomNode(hashFragment)
-      }
-
-      // `findDOMNode` is tricky because it returns just the first child if the component is a fragment.
-      // This already caused a bug where the first child was a <link/> in head.
-      if (!domNode) {
-        domNode = findDOMNode(this)
-      }
+      domNode = hashFragment
+        ? getHashFragmentDomNode(hashFragment)
+        : // `findDOMNode` is tricky because it returns just the first child if the component is a fragment.
+          // This already caused a bug where the first child was a <link/> in head.
+          findDOMNode(this)
 
       // If there is no DOM node this layout-router level is skipped. It'll be handled higher-up in the tree.
       if (!(domNode instanceof Element)) {
